@@ -1,0 +1,66 @@
+import java.util.*;
+
+public class Playfair {
+    static char[][] m = new char[5][5];
+
+    static void matrix(String key) {
+        boolean[] used = new boolean[26];
+        key = (key.toUpperCase() + "ABCDEFGHIKLMNOPQRSTUVWXYZ").replace("J", "I");
+
+        int k = 0;
+        for (char c : key.toCharArray())
+            if (Character.isLetter(c) && !used[c - 'A']) {
+                used[c - 'A'] = true;
+                m[k / 5][k % 5] = c;
+                k++;
+            }
+    }
+
+    static int[] pos(char c) {
+        if (c == 'J') c = 'I';
+        for (int i = 0; i < 5; i++)
+            for (int j = 0; j < 5; j++)
+                if (m[i][j] == c)
+                    return new int[]{i, j};
+        return null;
+    }
+
+    static String process(String s, boolean encrypt) {
+        s = s.toUpperCase().replace("J", "I").replaceAll("[^A-Z]", "");
+        if (encrypt && s.length() % 2 != 0)
+            s += "X";
+
+        String r = "";
+
+        for (int i = 0; i < s.length(); i += 2) {
+            int[] a = pos(s.charAt(i));
+            int[] b = pos(s.charAt(i + 1));
+
+            if (a[0] == b[0]) {
+                r += m[a[0]][(a[1] + (encrypt ? 1 : 4)) % 5];
+                r += m[b[0]][(b[1] + (encrypt ? 1 : 4)) % 5];
+            }
+            else if (a[1] == b[1]) {
+                r += m[(a[0] + (encrypt ? 1 : 4)) % 5][a[1]];
+                r += m[(b[0] + (encrypt ? 1 : 4)) % 5][b[1]];
+            }
+            else {
+                r += m[a[0]][b[1]];
+                r += m[b[0]][a[1]];
+            }
+        }
+        return r;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        matrix(sc.nextLine());
+
+        String text = sc.nextLine();
+
+        int choice = sc.nextInt(); //1 Encrypt, 2 Decrypt
+
+        System.out.println(process(text, choice == 1));
+    }
+}
