@@ -1,0 +1,55 @@
+//Encrpytion
+import java.util.Scanner;
+
+public class CaesarCipher {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        String text = sc.nextLine();
+        int shift = sc.nextInt();
+
+        String result = "";
+
+        shift = shift % 26;
+
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+
+            if (Character.isUpperCase(ch)) {
+                ch = (char) ((ch - 'A' + shift + 26) % 26 + 'A');
+            } 
+            else if (Character.isLowerCase(ch)) {
+                ch = (char) ((ch - 'a' + shift + 26) % 26 + 'a');
+            }
+
+            result += ch;
+        }
+
+        System.out.println(result);
+    }
+}
+//Decryption
+import java.util.*;
+
+public class CaesarDecrypt {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        String text = sc.nextLine();
+        int shift = sc.nextInt();
+
+        shift %= 26;
+        String result = "";
+
+        for (char ch : text.toCharArray()) {
+            if (Character.isUpperCase(ch))
+                result += (char)((ch - 'A' - shift + 26) % 26 + 'A');
+            else if (Character.isLowerCase(ch))
+                result += (char)((ch - 'a' - shift + 26) % 26 + 'a');
+            else
+                result += ch;
+        }
+
+        System.out.println(result);
+    }
+}
