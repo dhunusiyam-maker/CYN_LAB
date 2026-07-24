@@ -1,0 +1,74 @@
+import java.util.Scanner;
+
+public class HillAttack {
+
+    // Modular inverse
+    static int modInverse(int n) {
+        n = (n % 26 + 26) % 26;
+        for (int i = 1; i < 26; i++) {
+            if ((n * i) % 26 == 1)
+                return i;
+        }
+        return -1;
+    }
+
+    public static void main(String args[]) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int P[][] = new int[2][2];
+        int C[][] = new int[2][2];
+
+        System.out.println("Enter Plaintext Matrix (2x2):");
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                P[i][j] = sc.nextInt();
+
+        System.out.println("Enter Ciphertext Matrix (2x2):");
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                C[i][j] = sc.nextInt();
+
+        // Determinant of P
+        int det = P[0][0] * P[1][1] - P[0][1] * P[1][0];
+        det = (det % 26 + 26) % 26;
+
+        int detInv = modInverse(det);
+
+        if (detInv == -1) {
+            System.out.println("Plaintext matrix is not invertible.");
+            return;
+        }
+
+        // Inverse of P
+        int invP[][] = new int[2][2];
+
+        invP[0][0] = (P[1][1] * detInv) % 26;
+        invP[0][1] = ((26 - P[0][1]) * detInv) % 26;
+        invP[1][0] = ((26 - P[1][0]) * detInv) % 26;
+        invP[1][1] = (P[0][0] * detInv) % 26;
+
+        // Recover Key: K = C × P⁻¹
+        int K[][] = new int[2][2];
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                K[i][j] = 0;
+                for (int k = 0; k < 2; k++)
+                    K[i][j] += C[i][k] * invP[k][j];
+
+                K[i][j] %= 26;
+            }
+        }
+
+        System.out.println("\nRecovered Key Matrix:");
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++)
+                System.out.print(K[i][j] + " ");
+            System.out.println();
+        }
+
+        sc.close();
+    }
+}
