@@ -1,0 +1,63 @@
+import java.util.Scanner;
+
+public class AffineCipher {
+
+    // Find modular inverse of a
+    static int modInverse(int a) {
+        for (int i = 1; i < 26; i++) {
+            if ((a * i) % 26 == 1)
+                return i;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter plaintext (lowercase only): ");
+        char text[] = sc.next().toCharArray();
+
+        System.out.print("Enter value of a: ");
+        int a = sc.nextInt();
+
+        System.out.print("Enter value of b: ");
+        int b = sc.nextInt();
+
+        int inverse = modInverse(a);
+
+        if (inverse == -1) {
+            System.out.println("Invalid value of a");
+            return;
+        }
+
+        char cipher[] = new char[text.length];
+        char plain[] = new char[text.length];
+
+        // Encryption
+        for (int i = 0; i < text.length; i++) {
+            int x = text[i] - 'a';
+            int e = (a * x + b) % 26;
+            cipher[i] = (char) (e + 'a');
+        }
+
+        System.out.print("Encrypted Text: ");
+        for (int i = 0; i < cipher.length; i++)
+            System.out.print(cipher[i]);
+
+        System.out.println();
+
+        // Decryption
+        for (int i = 0; i < cipher.length; i++) {
+            int y = cipher[i] - 'a';
+            int d = (inverse * (y - b + 26)) % 26;
+            plain[i] = (char) (d + 'a');
+        }
+
+        System.out.print("Decrypted Text: ");
+        for (int i = 0; i < plain.length; i++)
+            System.out.print(plain[i]);
+
+        sc.close();
+    }
+}
