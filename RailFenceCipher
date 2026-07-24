@@ -1,0 +1,118 @@
+import java.util.Scanner;
+
+public class RailFenceCipher {
+
+    // Encryption
+    static String encrypt(String text, int key) {
+
+        char rail[][] = new char[key][text.length()];
+
+        // Fill matrix with '\n'
+        for (int i = 0; i < key; i++)
+            for (int j = 0; j < text.length(); j++)
+                rail[i][j] = '\n';
+
+        boolean down = false;
+        int row = 0, col = 0;
+
+        for (int i = 0; i < text.length(); i++) {
+
+            if (row == 0 || row == key - 1)
+                down = !down;
+
+            rail[row][col++] = text.charAt(i);
+
+            if (down)
+                row++;
+            else
+                row--;
+        }
+
+        String cipher = "";
+
+        for (int i = 0; i < key; i++)
+            for (int j = 0; j < text.length(); j++)
+                if (rail[i][j] != '\n')
+                    cipher += rail[i][j];
+
+        return cipher;
+    }
+
+    // Decryption
+    static String decrypt(String cipher, int key) {
+
+        char rail[][] = new char[key][cipher.length()];
+
+        for (int i = 0; i < key; i++)
+            for (int j = 0; j < cipher.length(); j++)
+                rail[i][j] = '\n';
+
+        boolean down = false;
+        int row = 0, col = 0;
+
+        // Mark zigzag positions
+        for (int i = 0; i < cipher.length(); i++) {
+
+            if (row == 0 || row == key - 1)
+                down = !down;
+
+            rail[row][col++] = '*';
+
+            if (down)
+                row++;
+            else
+                row--;
+        }
+
+        // Fill marked positions with ciphertext
+        int index = 0;
+
+        for (int i = 0; i < key; i++) {
+            for (int j = 0; j < cipher.length(); j++) {
+                if (rail[i][j] == '*' && index < cipher.length()) {
+                    rail[i][j] = cipher.charAt(index++);
+                }
+            }
+        }
+
+        // Read zigzag
+        String plain = "";
+        down = false;
+        row = 0;
+        col = 0;
+
+        for (int i = 0; i < cipher.length(); i++) {
+
+            if (row == 0 || row == key - 1)
+                down = !down;
+
+            plain += rail[row][col++];
+
+            if (down)
+                row++;
+            else
+                row--;
+        }
+
+        return plain;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter Plain Text: ");
+        String text = sc.next();
+
+        System.out.print("Enter Number of Rails: ");
+        int key = sc.nextInt();
+
+        String cipher = encrypt(text, key);
+        System.out.println("Encrypted Text : " + cipher);
+
+        String plain = decrypt(cipher, key);
+        System.out.println("Decrypted Text : " + plain);
+
+        sc.close();
+    }
+}
