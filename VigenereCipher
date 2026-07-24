@@ -1,0 +1,58 @@
+import java.util.Scanner;
+
+public class VigenereCipher {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter Plain Text (lowercase): ");
+        String plain = sc.next();
+
+        System.out.print("Enter Key (lowercase): ");
+        String key = sc.next();
+
+        // Repeat key to match plaintext length
+        String newKey = "";
+        int j = 0;
+        for (int i = 0; i < plain.length(); i++) {
+            newKey += key.charAt(j);
+            j++;
+            if (j == key.length())
+                j = 0;
+        }
+
+        // Encryption
+        String cipher = "";
+
+        for (int i = 0; i < plain.length(); i++) {
+
+            int p = plain.charAt(i) - 'a';
+            int k = newKey.charAt(i) - 'a';
+
+            int c = (p + k) % 26;
+
+            cipher += (char) (c + 'a');
+        }
+
+        System.out.println("Generated Key : " + newKey);
+        System.out.println("Encrypted Text: " + cipher);
+
+        // Decryption
+        String decrypted = "";
+
+        for (int i = 0; i < cipher.length(); i++) {
+
+            int c = cipher.charAt(i) - 'a';
+            int k = newKey.charAt(i) - 'a';
+
+            int p = (c - k + 26) % 26;
+
+            decrypted += (char) (p + 'a');
+        }
+
+        System.out.println("Decrypted Text: " + decrypted);
+
+        sc.close();
+    }
+}
