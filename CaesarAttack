@@ -1,0 +1,33 @@
+import java.util.Scanner;
+
+public class CaesarAttack {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter Cipher Text (lowercase): ");
+        String cipher = sc.next();
+
+        System.out.println("\nPossible Plain Texts:");
+
+        // Try all possible keys
+        for (int key = 1; key <= 25; key++) {
+
+            System.out.print("Key " + key + " : ");
+
+            for (int i = 0; i < cipher.length(); i++) {
+
+                char ch = cipher.charAt(i);
+
+                int p = (ch - 'a' - key + 26) % 26;
+
+                System.out.print((char) (p + 'a'));
+            }
+
+            System.out.println();
+        }
+
+        sc.close();
+    }
+}
