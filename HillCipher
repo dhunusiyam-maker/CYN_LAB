@@ -1,0 +1,87 @@
+import java.util.Scanner;
+
+public class HillCipher {
+
+    // Find modular inverse
+    static int modInverse(int n) {
+        n = (n % 26 + 26) % 26;
+        for (int i = 1; i < 26; i++) {
+            if ((n * i) % 26 == 1)
+                return i;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int key[][] = new int[2][2];
+
+        System.out.println("Enter 2x2 Key Matrix:");
+
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                key[i][j] = sc.nextInt();
+
+        System.out.print("Enter Plain Text: ");
+        String text = sc.next();
+
+        if (text.length() % 2 != 0)
+            text += "x";
+
+        String cipher = "";
+
+        // Encryption
+        for (int i = 0; i < text.length(); i += 2) {
+
+            int p1 = text.charAt(i) - 'a';
+            int p2 = text.charAt(i + 1) - 'a';
+
+            int c1 = (key[0][0] * p1 + key[0][1] * p2) % 26;
+            int c2 = (key[1][0] * p1 + key[1][1] * p2) % 26;
+
+            cipher += (char) (c1 + 'a');
+            cipher += (char) (c2 + 'a');
+        }
+
+        System.out.println("Encrypted Text : " + cipher);
+
+        // Find inverse key matrix
+        int det = key[0][0] * key[1][1] - key[0][1] * key[1][0];
+        det = (det % 26 + 26) % 26;
+
+        int detInv = modInverse(det);
+
+        if (detInv == -1) {
+            System.out.println("Key matrix is not invertible.");
+            return;
+        }
+
+        int inv[][] = new int[2][2];
+
+        inv[0][0] = ( key[1][1] * detInv) % 26;
+        inv[0][1] = ((-key[0][1] + 26) * detInv) % 26;
+        inv[1][0] = ((-key[1][0] + 26) * detInv) % 26;
+        inv[1][1] = ( key[0][0] * detInv) % 26;
+
+        String plain = "";
+
+        // Decryption
+        for (int i = 0; i < cipher.length(); i += 2) {
+
+            int c1 = cipher.charAt(i) - 'a';
+            int c2 = cipher.charAt(i + 1) - 'a';
+
+            int p1 = (inv[0][0] * c1 + inv[0][1] * c2) % 26;
+            int p2 = (inv[1][0] * c1 + inv[1][1] * c2) % 26;
+
+            plain += (char) (p1 + 'a');
+            plain += (char) (p2 + 'a');
+        }
+
+        System.out.println("Decrypted Text : " + plain);
+
+        sc.close();
+    }
+}
