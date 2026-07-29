@@ -1,33 +1,53 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class CaesarCipher {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
+        // Input
+        System.out.print("Enter the text: ");
         String text = sc.nextLine();
-        int shift = sc.nextInt();
-        int choice = sc.nextInt(); // 1-Encrypt, 2-Decrypt
 
-        shift %= 26;
+        System.out.print("Enter the shift value: ");
+        int shift = sc.nextInt();
+
+        System.out.println("1. Encryption");
+        System.out.println("2. Decryption");
+        System.out.print("Enter your choice: ");
+        int choice = sc.nextInt();
+
+        shift = shift % 26;
         String result = "";
 
+        // Process each character
         for (char ch : text.toCharArray()) {
+
+            // For uppercase letters
             if (Character.isUpperCase(ch)) {
+
                 if (choice == 1)
-                    result += (char)((ch - 'A' + shift) % 26 + 'A');
+                    result += (char) ((ch - 'A' + shift) % 26 + 'A');
                 else
-                    result += (char)((ch - 'A' - shift + 26) % 26 + 'A');
+                    result += (char) ((ch - 'A' - shift + 26) % 26 + 'A');
             }
+
+            // For lowercase letters
             else if (Character.isLowerCase(ch)) {
+
                 if (choice == 1)
-                    result += (char)((ch - 'a' + shift) % 26 + 'a');
+                    result += (char) ((ch - 'a' + shift) % 26 + 'a');
                 else
-                    result += (char)((ch - 'a' - shift + 26) % 26 + 'a');
+                    result += (char) ((ch - 'a' - shift + 26) % 26 + 'a');
             }
-            else
+
+            // Keep spaces and symbols unchanged
+            else {
                 result += ch;
+            }
         }
 
-        System.out.println(result);
+        System.out.println("Result: " + result);
+
+        sc.close();
     }
 }
