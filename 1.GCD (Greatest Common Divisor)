@@ -1,12 +1,9 @@
 import java.util.Scanner;
 
 public class GCD {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
 
-        int a = sc.nextInt();
-        int b = sc.nextInt();
-
+    // Function to find GCD
+    static int findGCD(int a, int b) {
         a = Math.abs(a);
         b = Math.abs(b);
 
@@ -15,7 +12,22 @@ public class GCD {
             b = a % b;
             a = temp;
         }
+        return a;
+    }
 
-        System.out.println("GCD = " + a);
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter first number: ");
+        int a = sc.nextInt();
+
+        System.out.print("Enter second number: ");
+        int b = sc.nextInt();
+
+        int gcd = findGCD(a, b);   // Function call
+
+        System.out.println("GCD = " + gcd);
+
+        sc.close();
     }
 }
