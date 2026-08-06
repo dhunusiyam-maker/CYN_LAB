@@ -1,9 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
 public class SDESServer {
-
     static int[] P10 = {3,5,2,7,4,10,1,9,8,6};
     static int[] P8 = {6,3,7,4,8,5,10,9};
     static int[] IP = {2,6,3,1,4,8,5,7};
