@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class Server {
+public class elgamalServer {
 
     static long powerMod(long base, long exp, long q) {
         long result = 1;
