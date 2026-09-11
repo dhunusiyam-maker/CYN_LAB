@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
-public class Client {
+public class elgamalClient {
 
     static long powerMod(long base, long exp, long q) {
         long result = 1;
